@@ -1,0 +1,45 @@
+import numpy as np
+import wave
+from scipy.io.wavfile import read, write
+import struct
+
+def AM(x, fc, fs ):
+	t = np.zeros( len( x ) )
+	for i in range( len( x ) ):
+		t[i] = i / fs
+	carrier = np.cos( 2 * np.pi * fc * t )
+	return x * carrier
+
+def main( ):
+	infile  = input("Input File: " )	# input r2d2.wav/ chirp_dsp.wav
+	outfile = input("Output File: " ) # output r2d2_am.wav / chirp_am.wav / violin_am.wav
+	
+	# ----------------------------------------------------
+	#  輸入模組
+	# ----------------------------------------------------	
+	wav = wave.open(infile, 'rb' )
+	num_channels = wav.getnchannels( )	# 通道數
+	sampwidth	 = wav.getsampwidth( )	# 樣本寬度
+	fs			 = wav.getframerate( )	# 取樣頻率(Hz)
+	num_frames	 = wav.getnframes( )	# 音框數 = 樣本數
+	comptype	 = wav.getcomptype( )	# 壓縮型態
+	compname	 = wav.getcompname( )	# 無壓縮
+	wav.close( )
+
+	sampling_rate, x = read(infile )	# 輸入訊號 io.wavfile library
+
+	# ----------------------------------------------------
+	#  DSP 模組
+	# ----------------------------------------------------	
+	fc = eval( input( "Enter carrier frequency (Hz) for AM: " ) )
+	y = AM(x, fc, fs )
+
+	# ----------------------------------------------------
+	#  輸出模組
+	# ----------------------------------------------------		
+	with wave.open(outfile, 'w' ) as wav_file:
+		wav_file.setparams(( num_channels, sampwidth, fs, num_frames, comptype, compname )) 
+		for s in y:
+			wav_file.writeframes( struct.pack( 'h', int ( s ) ) )
+	
+main( )
