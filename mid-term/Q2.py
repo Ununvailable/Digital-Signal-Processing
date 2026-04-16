@@ -1,63 +1,65 @@
 '''
-Q2. 
-(20%) Continuing with the harmonics in Q1, please calculate the parameters of the two-string wave and the harmonics respectively:
+Q2. (20%) Continuing from Q1's harmonic wave, calculate the parameters of the two sine waves and the harmonic:
 
-(8%) Calculate the phasors x_1 and x_2 of the two-string wave respectively
-
-(12%) Calculate the phasor, amplitude, and phase shift of the harmonic x
+(8%)  Calculate the phasors X̃1 and X̃2 of the two sine waves respectively.
+(12%) Calculate the phasor X̃ of the harmonic wave, its amplitude and phase shift.
 '''
 
 import numpy as np
-import matplotlib.pyplot as plt
 
 # ===========================================================================================================
 
-# Sampling parameters
-sampl_freq = 200 
-time_window = [0, 2]
-
-# Time array
-t = np.linspace(time_window[0], time_window[1], sampl_freq)
-
-# Sine wave parameters
-x1_para = [12, 4 * np.pi, np.pi /4]
-x2_para = [16, 8 * np.pi, 3 * np.pi / 4]
+# Parameters (same as Q1)
+x1_para = [12, 4 * np.pi, np.pi / 4]   # A1, ω1, ϕ1
+x2_para = [16, 8 * np.pi, 3 * np.pi / 4]  # A2, ω2, ϕ2
 
 # ===========================================================================================================
 
-# Wave synthesizing
-def wave_synthesis(parameter):
-    A = parameter[0]
-    w = parameter[1]
-    phi = parameter[2]
+# (8%) Calculate the phasors X̃1 and X̃2 of the two sine waves.
+# Ans:
+# A phasor is defined as: X̃ = A * e^(jϕ) = A[cos(ϕ) + j·sin(ϕ)]
+# (It captures amplitude and phase; angular frequency ω is implicit.)
 
-    # Apply: x(t)=A[cos(ωt+ϕ)+jsin(ωt+ϕ)]
-    x = A * (np.cos(w * t + phi) + 1j * np.sin(w * t + phi))
-    
-    return x
+A1, w1, phi1 = x1_para
+A2, w2, phi2 = x2_para
 
-# Wave summing
-def wave_summing(*component_waves):
-    x = 0 * component_waves[0]
-    for wave in component_waves:
-        x += wave
+X1_phasor = A1 * np.exp(1j * phi1)
+X2_phasor = A2 * np.exp(1j * phi2)
 
-    return x
-
-# ===========================================================================================================
-    
-x1 = wave_synthesis(x1_para)
-x2 = wave_synthesis(x2_para)
-x = wave_summing(x1, x2)
+print("=== Phasors of the two sine waves ===")
+print(f"X̃1 = {A1} · e^(j·π/4)")
+print(f"   = {X1_phasor:.4f}")
+print(f"   Amplitude : {np.abs(X1_phasor):.4f}")
+print(f"   Phase     : {np.angle(X1_phasor):.4f} rad  ({np.degrees(np.angle(X1_phasor)):.2f}°)")
+print()
+print(f"X̃2 = {A2} · e^(j·3π/4)")
+print(f"   = {X2_phasor:.4f}")
+print(f"   Amplitude : {np.abs(X2_phasor):.4f}")
+print(f"   Phase     : {np.angle(X2_phasor):.4f} rad  ({np.degrees(np.angle(X2_phasor)):.2f}°)")
+print()
 
 # ===========================================================================================================
 
-plt.plot(t, x1)
-plt.plot(t, x2)
-plt.legend
-plt.grid(True)
-plt.show
+# (12%) Calculate the phasor X̃ of the harmonic wave, its amplitude and phase shift.
+# Ans:
+# NOTE: x1 and x2 have DIFFERENT angular frequencies (4π vs 8π),
+# so they cannot be added as a single phasor in the classical sense.
+# However, we can represent the harmonic as a sum of two phasors at their
+# respective frequencies:
+#
+#   x(t) = Re{ X̃1 · e^(jω1t) } + Re{ X̃2 · e^(jω2t) }
+#
+# The "effective" or resultant phasor is often computed numerically by
+# evaluating the complex sum at a reference time t = 0:
 
-plt.plot(t, x)
-plt.grid(True)
-plt.show()
+X_phasor = X1_phasor + X2_phasor   # vector sum at t = 0
+
+A_harmonic   = np.abs(X_phasor)
+phi_harmonic = np.angle(X_phasor)
+
+print("=== Phasor of the harmonic wave (vector sum at t = 0) ===")
+print(f"X̃ = X̃1 + X̃2")
+print(f"  = {X1_phasor:.4f} + {X2_phasor:.4f}")
+print(f"  = {X_phasor:.4f}")
+print(f"  Amplitude  A = {A_harmonic:.4f}")
+print(f"  Phase shift ϕ = {phi_harmonic:.4f} rad  ({np.degrees(phi_harmonic):.2f}°)")
