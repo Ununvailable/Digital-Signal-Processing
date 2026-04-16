@@ -1,18 +1,14 @@
 '''
-Q3. 
-(26%) If the beat wave is defined as:
+Q3. (26%) If the beat wave is defined as:
 
-    x(t)=Acos(2πf_1 t)⋅cos(2πf_2 t)
+    x(t) = A·cos(2π·f1·t) + A·cos(2π·f2·t)
 
-where the amplitude A = 3, the frequencies f1 = 10Hz and f2 = 200Hz, use a Python program to implement it. 
+Where amplitude A = 3, frequency f1 = 10 Hz, f2 = 200 Hz.
+Use Python to implement, display time t = 0~0.2 s, sampling frequency fs = 5000 Hz.
 
-With a display time t = 0～0.2 seconds and a sampling frequency of fs = 5000Hz, draw the waveform of the beat wave as follows:
-
-(12%) Draw the overlapping two-string waveforms on the same graph and label each wave function
-
-(7%) Draw the waveform of the beat wave
-
-(7%) Plot the envelope phenomenon of the beat wave, that is, overlay the low-frequency signal waveform with the beat wave waveform.
+(12%) Draw the two overlapping sine waves on the same graph and label each wave function.
+(7%)  Draw the beat wave waveform.
+(7%)  Draw the beat wave envelope, i.e. overlay the low-frequency signal waveform on the beat wave.
 '''
 
 import numpy as np
@@ -20,52 +16,68 @@ import matplotlib.pyplot as plt
 
 # ===========================================================================================================
 
-# Sampling parameters
-sampl_freq = 200 
-time_window = [0, 2]
-
-# Time array
-t = np.linspace(time_window[0], time_window[1], sampl_freq)
-
-# Sine wave parameters
-x1_para = [12, 4 * np.pi, np.pi /4]
-x2_para = [16, 8 * np.pi, 3 * np.pi / 4]
+# Parameters
+A  = 3
+f1 = 10     # Hz (low frequency)
+f2 = 200    # Hz (high frequency)
+fs = 5000   # Hz (sampling frequency)
+t  = np.linspace(0, 0.2, int(fs * 0.2))
 
 # ===========================================================================================================
 
-# Wave synthesizing
-def wave_synthesis(parameter):
-    A = parameter[0]
-    w = parameter[1]
-    phi = parameter[2]
+# Component waves
+x1 = A * np.cos(2 * np.pi * f1 * t)
+x2 = A * np.cos(2 * np.pi * f2 * t)
 
-    # Apply: x(t)=A[cos(ωt+ϕ)+jsin(ωt+ϕ)]
-    x = A * (np.cos(w * t + phi) + 1j * np.sin(w * t + phi))
-    
-    return x
+# Beat wave: sum of the two components
+x_beat = x1 + x2
 
-# Wave summing
-def wave_summing(*component_waves):
-    x = 0 * component_waves[0]
-    for wave in component_waves:
-        x += wave
-
-    return x
-
-# ===========================================================================================================
-    
-x1 = wave_synthesis(x1_para)
-x2 = wave_synthesis(x2_para)
-x = wave_summing(x1, x2)
+# Envelope: the beat wave can be written as
+#   x(t) = 2A·cos(2π·f_mod·t)·cos(2π·f_carrier·t)
+# where f_mod = (f2 - f1) / 2 = 95 Hz  and  f_carrier = (f2 + f1) / 2 = 105 Hz
+# The envelope (low-frequency amplitude modulation) is:
+#   envelope(t) = 2A·|cos(2π·f_mod·t)|
+f_mod     = (f2 - f1) / 2   # 95 Hz
+f_carrier = (f2 + f1) / 2   # 105 Hz
+envelope  = 2 * A * np.abs(np.cos(2 * np.pi * f_mod * t))
 
 # ===========================================================================================================
 
-plt.plot(t, x1)
-plt.plot(t, x2)
-plt.legend
+# (12%) Draw the two overlapping sine waves on the same graph.
+# Ans:
+plt.figure(figsize=(10, 4))
+plt.plot(t, x1, label=r'$x_1(t)=3\cos(2\pi \cdot 10 \cdot t)$', linewidth=1)
+plt.plot(t, x2, label=r'$x_2(t)=3\cos(2\pi \cdot 200 \cdot t)$', linewidth=0.8, alpha=0.7)
+plt.title('Two Overlapping Sine Waves')
+plt.xlabel('Time (s)')
+plt.ylabel('Amplitude')
 plt.grid(True)
-plt.show
+plt.legend()
+plt.tight_layout()
+plt.show()
 
-plt.plot(t, x)
+# (7%) Draw the beat wave waveform.
+# Ans:
+plt.figure(figsize=(10, 4))
+plt.plot(t, x_beat, color='steelblue', linewidth=0.8, label=r'$x(t)=x_1(t)+x_2(t)$')
+plt.title('Beat Wave')
+plt.xlabel('Time (s)')
+plt.ylabel('Amplitude')
 plt.grid(True)
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+# (7%) Draw the beat wave envelope overlaid on the beat wave.
+# Ans:
+plt.figure(figsize=(10, 4))
+plt.plot(t, x_beat,   color='steelblue', linewidth=0.6, alpha=0.8, label=r'Beat wave $x(t)$')
+plt.plot(t,  envelope, color='red',       linewidth=1.5, label=r'Envelope $2A|\cos(2\pi \cdot 95 \cdot t)|$')
+plt.plot(t, -envelope, color='red',       linewidth=1.5, linestyle='--')
+plt.title('Beat Wave with Envelope')
+plt.xlabel('Time (s)')
+plt.ylabel('Amplitude')
+plt.grid(True)
+plt.legend()
+plt.tight_layout()
 plt.show()
