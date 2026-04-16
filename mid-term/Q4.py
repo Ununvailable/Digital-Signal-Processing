@@ -1,63 +1,40 @@
 '''
-Q4. 
-(12%) With a sampling frequency of fs = 1500Hz and a signal phase shift of 0, between 0 and 2 seconds of display time, 
-    use the SciPy Signal library in Python to generate a chirp signal (up-chirp), 
-    where the chirp signal frequency ranges from 1Hz to 350Hz in a non-linear logarithmic scan, 
-    with the initial and final frequencies at time points of 0 and 3 seconds respectively, 
-    and display its waveform.
+Q4. (12%) Display time 0~2 s, sampling frequency fs = 1500 Hz, signal phase shift = 0.
+Use Python's SciPy Signal package to generate an up-chirp signal,
+where the chirp frequency sweeps non-linearly (logarithmic) from 1 Hz to 350 Hz.
+The initial and final frequencies correspond to t = 0 s and t = 3 s respectively.
+Display the waveform.
 '''
 
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.signal import chirp
 
 # ===========================================================================================================
 
-# Sampling parameters
-sampl_freq = 200 
-time_window = [0, 2]
-
-# Time array
-t = np.linspace(time_window[0], time_window[1], sampl_freq)
-
-# Sine wave parameters
-x1_para = [12, 4 * np.pi, np.pi /4]
-x2_para = [16, 8 * np.pi, 3 * np.pi / 4]
+# Parameters
+fs          = 1500          # Hz
+t           = np.linspace(0, 2, fs * 2)   # 0 ~ 2 s, 3000 samples
+f0          = 1             # Hz  – frequency at t = 0
+f1          = 350           # Hz  – frequency at t1 = 3 s
+t1          = 3             # s   – reference time for final frequency
+phi         = 0             # deg – phase shift (scipy chirp uses degrees)
 
 # ===========================================================================================================
 
-# Wave synthesizing
-def wave_synthesis(parameter):
-    A = parameter[0]
-    w = parameter[1]
-    phi = parameter[2]
-
-    # Apply: x(t)=A[cos(ωt+ϕ)+jsin(ωt+ϕ)]
-    x = A * (np.cos(w * t + phi) + 1j * np.sin(w * t + phi))
-    
-    return x
-
-# Wave summing
-def wave_summing(*component_waves):
-    x = 0 * component_waves[0]
-    for wave in component_waves:
-        x += wave
-
-    return x
-
-# ===========================================================================================================
-    
-x1 = wave_synthesis(x1_para)
-x2 = wave_synthesis(x2_para)
-x = wave_summing(x1, x2)
+# Generate logarithmic up-chirp
+# scipy.signal.chirp: method='logarithmic', phi is in degrees
+x_chirp = chirp(t, f0=f0, f1=f1, t1=t1, method='logarithmic', phi=phi)
 
 # ===========================================================================================================
 
-plt.plot(t, x1)
-plt.plot(t, x2)
-plt.legend
+# Display waveform
+plt.figure(figsize=(10, 4))
+plt.plot(t, x_chirp, linewidth=0.6, color='darkorange', label='Up-Chirp (logarithmic, 1→350 Hz)')
+plt.title('Logarithmic Up-Chirp Signal (0~2 s)')
+plt.xlabel('Time (s)')
+plt.ylabel('Amplitude')
 plt.grid(True)
-plt.show
-
-plt.plot(t, x)
-plt.grid(True)
+plt.legend()
+plt.tight_layout()
 plt.show()
