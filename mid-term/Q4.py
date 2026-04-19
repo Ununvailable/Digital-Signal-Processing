@@ -13,17 +13,16 @@ from scipy.signal import chirp
 # ===========================================================================================================
 
 # Parameters
-fs          = 1500          # Hz
-t           = np.linspace(0, 2, fs * 2)   # 0 ~ 2 s, 3000 samples
-f0          = 1             # Hz  – frequency at t = 0
-f1          = 350           # Hz  – frequency at t1 = 3 s
-t1          = 3             # s   – reference time for final frequency
-phi         = 0             # deg – phase shift (scipy chirp uses degrees)
+fs = 1500  # Hz
+t = np.linspace(0, 2, fs * 2)   # 0 ~ 2 s, 3000 samples
+f0 = 1  # Hz  – frequency at t = 0
+f1 = 350  # Hz  – frequency at t1 = 3 s
+t1 = 3  # s   – reference time for final frequency
+phi = 0  # deg – phase shift (scipy chirp uses degrees)
 
 # ===========================================================================================================
 
 # Generate logarithmic up-chirp
-# scipy.signal.chirp: method='logarithmic', phi is in degrees
 x_chirp = chirp(t, f0=f0, f1=f1, t1=t1, method='logarithmic', phi=phi)
 
 # ===========================================================================================================

@@ -42,10 +42,8 @@ print()
 
 # (12%) Calculate the phasor X̃ of the harmonic wave, its amplitude and phase shift.
 # Ans:
-# NOTE: x1 and x2 have DIFFERENT angular frequencies (4π vs 8π),
-# so they cannot be added as a single phasor in the classical sense.
-# However, we can represent the harmonic as a sum of two phasors at their
-# respective frequencies:
+# NOTE: x1 and x2 have DIFFERENT angular frequencies (4π vs 8π), so they cannot be added as a single phasor in the classical sense.
+# However, the harmonic can be presented as a sum of two phasors at their respective frequencies:
 #
 #   x(t) = Re{ X̃1 · e^(jω1t) } + Re{ X̃2 · e^(jω2t) }
 #

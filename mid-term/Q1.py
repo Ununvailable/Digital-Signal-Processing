@@ -94,12 +94,9 @@ plt.show()
 # x1(t) has angular frequency ω1 = 4π rad/s → f1 = ω1 / (2π) = 2 Hz
 # x2(t) has angular frequency ω2 = 8π rad/s → f2 = ω2 / (2π) = 4 Hz
 #
-# The synthesized harmonic x(t) = x1(t) + x2(t) is a superposition of two
-# complex exponential sinusoids at 2 Hz and 4 Hz.
-#
+# The synthesized harmonic x(t) = x1(t) + x2(t) is a superposition of two complex exponential sinusoids at 2 Hz and 4 Hz.
 # Because f2 = 2 × f1, x2 is the second harmonic of x1.
-# The fundamental frequency of the composite wave equals f1 = 2 Hz
-# (the GCD of the two component frequencies).
+# The fundamental frequency of the composite wave equals f1 = 2 Hz (the GCD of the two component frequencies).
 #
 # The resulting waveform is periodic with period T = 1/f1 = 0.5 s.
 # Its shape is not a pure sinusoid; it exhibits amplitude and phase modulation

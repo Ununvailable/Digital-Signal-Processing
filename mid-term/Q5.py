@@ -15,11 +15,11 @@ from scipy.signal import chirp
 # ===========================================================================================================
 
 # Parameters (same as Q4)
-fs  = 1500
-t   = np.linspace(0, 2, fs * 2)
-f0  = 1
-f1  = 350
-t1  = 3
+fs = 1500
+t = np.linspace(0, 2, fs * 2)
+f0 = 1
+f1 = 350
+t1 = 3
 phi = 0
 
 # ===========================================================================================================
@@ -53,19 +53,17 @@ plt.show()
 
 # Calculate the phasor of the noise wave: amplitude and phase shift.
 # Ans:
-# Convert the noise signal to a complex phasor representation using the
-# discrete Fourier transform (DFT). The dominant (DC) component of the
-# noise gives the "average" phasor; alternatively we use the overall
-# complex representation at the fundamental analysis frequency.
+# Convert the noise signal to a complex phasor representation using the discrete Fourier transform (DFT). 
+# The dominant (DC) component of the noise gives the "average" phasor; alternatively we use the overall complex representation at the fundamental analysis frequency.
 #
 # For a random noise signal, the conventional approach is:
 #   Treat the noise as a complex signal via its analytic representation,
 #   then compute the mean amplitude and mean phase.
 
 # Method: compute the FFT and find the component with maximum magnitude
-N       = len(noise)
+N = len(noise)
 noise_fft = np.fft.fft(noise) / N          # normalise
-freqs     = np.fft.fftfreq(N, d=1/fs)
+freqs = np.fft.fftfreq(N, d=1/fs)
 
 # Index of maximum magnitude (dominant frequency component of noise)
 idx = np.argmax(np.abs(noise_fft[:N // 2]))
