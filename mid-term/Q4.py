@@ -1,7 +1,6 @@
 '''
 Q4. (12%) Display time 0~2 s, sampling frequency fs = 1500 Hz, signal phase shift = 0.
-Use Python's SciPy Signal package to generate an up-chirp signal,
-where the chirp frequency sweeps non-linearly (logarithmic) from 1 Hz to 350 Hz.
+Use Python's SciPy Signal package to generate an up-chirp signal, where the chirp frequency sweeps non-linearly (logarithmic) from 1 Hz to 350 Hz.
 The initial and final frequencies correspond to t = 0 s and t = 3 s respectively.
 Display the waveform.
 '''

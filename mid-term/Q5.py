@@ -2,8 +2,7 @@
 Q5. (12%) Continuing from Q4's chirp signal, add uniform noise (using NumPy's Random package).
 Uniform distribution interval: [-1, 1].
 
-Draw both signal waveforms on the same graph:
-    overlay the noise-free chirp on the noisy chirp, and label each wave function.
+Draw both signal waveforms on the same graph: overlay the noise-free chirp on the noisy chirp, and label each wave function.
 
 Calculate the phasor of the noise wave: amplitude and phase shift.
 '''
