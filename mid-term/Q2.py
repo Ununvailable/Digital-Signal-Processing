@@ -47,8 +47,7 @@ print()
 #
 #   x(t) = Re{ X̃1 · e^(jω1t) } + Re{ X̃2 · e^(jω2t) }
 #
-# The "effective" or resultant phasor is often computed numerically by
-# evaluating the complex sum at a reference time t = 0:
+# The "effective" or resultant phasor is often computed numerically by evaluating the complex sum at a reference time t = 0:
 
 X_phasor = X1_phasor + X2_phasor   # vector sum at t = 0
 
