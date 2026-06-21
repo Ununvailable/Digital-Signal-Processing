@@ -2,7 +2,8 @@
 Q5. (12%) Continuing from Q4's chirp signal, add uniform noise (using NumPy's Random package).
 Uniform distribution interval: [-1, 1].
 
-Draw both signal waveforms on the same graph: overlay the noise-free chirp on the noisy chirp, and label each wave function.
+Draw both signal waveforms on the same graph:
+    overlay the noise-free chirp on the noisy chirp, and label each wave function.
 
 Calculate the phasor of the noise wave: amplitude and phase shift.
 '''
@@ -14,11 +15,11 @@ from scipy.signal import chirp
 # ===========================================================================================================
 
 # Parameters (same as Q4)
-fs = 1500
-t = np.linspace(0, 2, fs * 2)
-f0 = 1
-f1 = 350
-t1 = 3
+fs  = 1500
+t   = np.linspace(0, 2, fs * 2)
+f0  = 1
+f1  = 350
+t1  = 3
 phi = 0
 
 # ===========================================================================================================
@@ -52,17 +53,19 @@ plt.show()
 
 # Calculate the phasor of the noise wave: amplitude and phase shift.
 # Ans:
-# Convert the noise signal to a complex phasor representation using the discrete Fourier transform (DFT). 
-# The dominant (DC) component of the noise gives the "average" phasor; alternatively we use the overall complex representation at the fundamental analysis frequency.
+# Convert the noise signal to a complex phasor representation using the
+# discrete Fourier transform (DFT). The dominant (DC) component of the
+# noise gives the "average" phasor; alternatively we use the overall
+# complex representation at the fundamental analysis frequency.
 #
 # For a random noise signal, the conventional approach is:
 #   Treat the noise as a complex signal via its analytic representation,
 #   then compute the mean amplitude and mean phase.
 
 # Method: compute the FFT and find the component with maximum magnitude
-N = len(noise)
+N       = len(noise)
 noise_fft = np.fft.fft(noise) / N          # normalise
-freqs = np.fft.fftfreq(N, d=1/fs)
+freqs     = np.fft.fftfreq(N, d=1/fs)
 
 # Index of maximum magnitude (dominant frequency component of noise)
 idx = np.argmax(np.abs(noise_fft[:N // 2]))
@@ -74,3 +77,57 @@ print("=== Phasor of the Noise Wave ===")
 print(f"Dominant frequency : {freqs[idx]:.4f} Hz")
 print(f"Amplitude          : {A_noise:.4f}")
 print(f"Phase shift        : {phi_noise:.4f} rad  ({np.degrees(phi_noise):.2f}°)")
+
+# ===========================================================================================================
+
+# Frequency domain plots
+N       = len(t)
+freqs   = np.fft.rfftfreq(N, d=1/fs)   # one-sided frequency axis
+
+# FFT magnitudes (one-sided, normalised)
+def compute_magnitude(signal):
+    S = np.fft.rfft(signal) / N
+    mag = 2 * np.abs(S)
+    mag[0] /= 2        # DC component not doubled
+    return mag
+
+mag_chirp  = compute_magnitude(x_chirp)
+mag_noise  = compute_magnitude(noise)
+mag_noisy  = compute_magnitude(x_noisy)
+
+# --- Plot 1: frequency spectrum of clean chirp ---
+plt.figure(figsize=(10, 4))
+plt.plot(freqs, mag_chirp, color='darkorange', linewidth=0.8, label='Clean chirp $X_{chirp}(f)$')
+plt.title('Frequency Spectrum – Clean Chirp')
+plt.xlabel('Frequency (Hz)')
+plt.ylabel('Magnitude')
+plt.xlim(0, fs / 2)
+plt.grid(True)
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+# --- Plot 2: frequency spectrum of noise ---
+plt.figure(figsize=(10, 4))
+plt.plot(freqs, mag_noise, color='steelblue', linewidth=0.8, label='Noise $N(f)$')
+plt.title('Frequency Spectrum – Uniform Noise')
+plt.xlabel('Frequency (Hz)')
+plt.ylabel('Magnitude')
+plt.xlim(0, fs / 2)
+plt.grid(True)
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+# --- Plot 3: frequency spectra of noisy vs clean chirp overlaid ---
+plt.figure(figsize=(10, 4))
+plt.plot(freqs, mag_noisy, color='gray',       linewidth=0.8, alpha=0.8, label='Noisy chirp $X_{noisy}(f)$')
+plt.plot(freqs, mag_chirp, color='darkorange', linewidth=0.8,             label='Clean chirp $X_{chirp}(f)$')
+plt.title('Frequency Spectrum – Noisy vs Clean Chirp')
+plt.xlabel('Frequency (Hz)')
+plt.ylabel('Magnitude')
+plt.xlim(0, fs / 2)
+plt.grid(True)
+plt.legend()
+plt.tight_layout()
+plt.show()
