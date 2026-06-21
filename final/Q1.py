@@ -19,7 +19,8 @@ from scipy.signal import resample
 # ===========================================================================================================
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-IN_FILE    = os.path.join(SCRIPT_DIR, 'violin.wav')
+AUDIO_FILE = 'audio/violin.wav'  # MB41Y207
+IN_FILE    = os.path.join(SCRIPT_DIR, AUDIO_FILE)
 fc         = 1250  # carrier frequency (Hz)
 
 # ===========================================================================================================
